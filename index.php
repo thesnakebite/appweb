@@ -6,7 +6,7 @@
     require_once('models/User.php');
     
     require('views/header.php');
-    require('views/menu.php');
+    require('views/login.php');
     require('views/main.php');   
     require('views/footer.php');
 ?>

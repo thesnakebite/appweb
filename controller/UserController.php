@@ -75,79 +75,103 @@ class Usuario
     private function setFormRegister()
     {
         $this->formRegistro = '
-        <form
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-person-plus me-2"></i>Registro
+            </div>
+            <div class="card-body p-4">
+                <form
                 action="index.php"
                 method="POST"
                 id="formRegistro"
-                class="border border-white p-4 rounded-4"
-                enctype="multipart/form-data"
-            >
-
-                <h4 class="text-center text-white">Registro</h4>
-
-                <div class="mb-3">
-                    <label for="user" class="form-label">Usuario</label>
-                    <input
-                        class="form-control"
-                        id="userRegistro"
-                        name="nombre" 
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input
-                        type="password"
-                        class="form-control"
-                        id="password1"
-                        name="password" 
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <label for="password" class="form-label">Confirmar Contraseña</label>
-                    <input
-                        type="password"
-                        class="form-control"
-                        id="password2"
-                        name="password" 
-                    />
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input
-                        type="email"
-                        class="form-control"
-                        id="email1"
-                        name="email" 
-                    />
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Confirmar Email</label>
-                    <input
-                        type="email"
-                        class="form-control"
-                        id="email2"
-                        name="email" 
-                    />
-                </div>
-
-                <div class="mb-3">
-                    <label for="foto" class="form-label">Foto</label>
-                    <input
+                enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="userRegistro" class="form-label">Usuario</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input
+                            class="form-control"
+                            id="userRegistro"
+                            name="nombre"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input
+                            type="password"
+                            class="form-control"
+                            id="password1"
+                            name="password"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirmar Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input
+                            type="password"
+                            class="form-control"
+                            id="password2"
+                            name="password"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email1" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input
+                            type="email"
+                            class="form-control"
+                            id="email1"
+                            name="email"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email2" class="form-label">Confirmar Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope-fill"></i>
+                            </span>
+                            <input
+                            type="email"
+                            class="form-control"
+                            id="email2"
+                            name="email"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="foto" class="form-label">Foto</label>
+                        <input
                         type="file"
-                        class="form-control-file"
-                        name="foto" 
-                    />
-                </div>
-
-                <input type="hidden" name="conectado" value="0">
-                <input type="hidden" name="estado" value="1">
-
-                <input type="hidden" name="action" value="REG_USUARIOS" />
-                <input type="submit" class="btn btn-secondary" value="Registrar" />
-                <input type="reset" class="btn btn-danger" value="Reset" />
-            </form>
+                        class="form-control"
+                        name="foto"
+                        />
+                    </div>
+                    <input type="hidden" name="conectado" value="0">
+                    <input type="hidden" name="estado" value="1">
+                    <input type="hidden" name="action" value="REG_USUARIOS" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-access">Registrar</button>
+                        <button type="reset" class="btn btn-reset">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         ';
     }
 
@@ -194,33 +218,48 @@ class Usuario
     private function setFormLogin()
     {
         $this->formLogin = '
-            <form
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Acceso
+            </div>
+            <div class="card-body p-4">
+                <form
                 action="index.php"
-                method="POST"
-                class="border border-white p-4 rounded-4">
-                <h4 class="text-center text-white">Acceso</h4>
-                <div class="mb-3">
-                    <label for="user" class="form-label">E-Mail</label>
-                    <input
-                        type="email"
-                        class="form-control"
-                        name="email"
-                        required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input
-                        type="password"
-                        class="form-control"
-                        name="password"
-                        required>
-                </div>
-
-                <input type="hidden" name="action" value="LOGIN_USER">
-
-                <input type="submit" class="btn btn-secondary" value="Acceder">
-                <input type="reset" class="btn btn-danger" value="Reset">
-            </form>
+                method="POST">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-Mail</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input
+                            type="password"
+                            class="form-control"
+                            name="password"
+                            required>
+                        </div>
+                    </div>
+                    <input type="hidden" name="action" value="LOGIN_USER">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-access">Acceder</button>
+                        <button type="reset" class="btn btn-reset">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         ';
     }
 

@@ -29,6 +29,75 @@ body {
     margin-bottom: 20px;
 }
 
+/* Login */
+.card {
+    width: 100%;
+    max-width: 450px;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    padding: 1.2rem;
+    font-size: 1.5rem;
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.form-label {
+    color: white;
+    font-weight: 500;
+}
+
+.btn-access {
+    background:#f06;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-access:hover {
+    background: #d05;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-reset {
+    background-color: transparent;
+    border: 1px solid white;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s;
+}
+
+.btn-reset:hover {
+    background-color: white;
+    border-color: white;
+    color: #000;
+}
+
 .modal label {
     color: black;
 }
