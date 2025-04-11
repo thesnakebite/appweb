@@ -9,17 +9,26 @@
     </p>
 </div>
 
+<!-- Contenedor para mensajes -->
+<div class="container" id="salidas">
+    <?php
+        if(isset($_GET['msn']) && !empty($_GET['msn'])) {
+            echo urldecode($_GET['msn']);
+        }
+    ?>
+</div>
+
 <section class="container p-5">
     <div class="row">        
         <div class="col-lg-6">
-            <!-- FORMULARIO DE LOGIN -->
+            <!-- Formulario de login -->
             <?php
                 $users = new Usuario();
                 echo $users->getFormLogin();
             ?>
         </div>
         <div class="col-lg-6">
-             <!-- FORMULARIO DE REGISTRO -->
+             <!-- Formulario de registro -->
              <?php
                 $users = new Usuario();
                 echo $users->getFormRegister();

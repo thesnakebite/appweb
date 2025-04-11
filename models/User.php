@@ -1,5 +1,5 @@
 <?php
-require_once('model.php');
+require_once('./models/model.php');
 
 class UsuariosDB extends ConectarDB
 {
@@ -63,6 +63,7 @@ class UsuariosDB extends ConectarDB
             
             return $resultado;
         }
+        
         return false;
     }
 

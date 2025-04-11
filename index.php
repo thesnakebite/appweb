@@ -2,7 +2,7 @@
     session_start();
     require_once('config.php');
     require_once('vendor/autoload.php');
-    require_once('controller/UserController.php');    
+    require_once('controllers/UserController.php');    
     require_once('models/User.php');
     
     require('views/header.php');

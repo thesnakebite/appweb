@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+     <!-- Meta básicos SEO -->
+     <meta name="description" content="">
+     <meta name="keywords" content="">
+     
+     <title>AppWeb</title>
     <!-- DataTables  -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css" type="text/css" />
     <!-- Bootstrap -->

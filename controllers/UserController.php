@@ -3,24 +3,58 @@ $RUTA_ABSOLUTA = dirname(__DIR__) . '/';
 require_once($RUTA_ABSOLUTA . 'config.php');
 require_once($RUTA_ABSOLUTA . 'models/User.php');
 
-$usuarios = new Usuario();
+$usuario = new Usuario();
+$msn = '';
 
+if ($_POST) {
+    if (isset($_POST['action']) && !empty($_POST['action'])) {
 
-// if($_POST){
-//     if(isset($_POST['action']) && !empty($_POST['action'])){
-//         if($_POST['action'] == 'REG_USUARIOS'){      
-//             $id = $usuarios->registrarUsuario($_POST);                
+        $datos = [];
+
+        foreach ($_POST as $key => $value) {
+            if ($key != 'action') {
+                $datos[$key] = htmlspecialchars($value);
+            }
+        }
+
+        switch ($_POST['action']) {
+            case 'REG_USUARIOS':
+                $msn = $usuario->registerUserAccount($datos);
+                $_SESSION['mensaje_registro'] = $resultado;
+                header('location:' . RUTA_WEB . 'index.php?msn=' . urlencode($msn));
+                exit;
+                break;
+
+            case 'LOGIN_USER':
+                $msn = $usuario->loginUsuario($datos);
+                break;
+
+            case 'ACTUALIZAR_USUARIO':
+                $msn = $usuario->actualizarUsuario($datos);
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+// Procedimiento de formularios POST
+// if ($_POST) {
+//     if (isset($_POST['action']) && !empty($_POST['action'])){
+//         if ($_POST['action'] == 'REG_USUARIOS') {
+//             $id = $usuarios->registerUserAccount($_POST);                
 //             $msn = $usuarios->SubirFoto($_FILES,$id);
 //             header('location:'.RUTA_WEB.'index.php?views=users&msn='.$msn);                  
 //         }
-//         if($_POST['action'] == 'LOGIN_USER'){
+//         if ($_POST['action'] == 'LOGIN_USER'){
 //             $msn = $usuarios->loginUsuarios($_POST);  
 //             header('location:'.RUTA_WEB.'index.php?views=dashboard&msn='.$msn);               
 //         }
 //         if($_POST['action'] == 'UPDATE_USUARIOS'){
 //             $msn = $usuarios->updateUsuario($_POST); 
 //             if(isset($_POST['id']) && !empty($_POST['id'])){
-//                 $id = $_POST['id'];
+//                $id = $_POST['id'];
 //                 $msn = $usuarios->SubirFoto($_FILES,$id);
 //                 header('location:'.RUTA_WEB.'index.php?views=users&msn='.$msn);           
 //             }               
@@ -81,10 +115,11 @@ class Usuario
             </div>
             <div class="card-body p-4">
                 <form
-                action="index.php"
-                method="POST"
-                id="formRegistro"
-                enctype="multipart/form-data">
+                    action="index.php"
+                    method="POST"
+                    id="formRegistro"
+                    enctype="multipart/form-data"
+                >
                     <div class="mb-3">
                         <label for="userRegistro" class="form-label">Usuario</label>
                         <div class="input-group">
@@ -92,9 +127,9 @@ class Usuario
                                 <i class="bi bi-person"></i>
                             </span>
                             <input
-                            class="form-control"
-                            id="userRegistro"
-                            name="nombre"
+                                class="form-control"
+                                id="userRegistro"
+                                name="nombre"
                             />
                         </div>
                     </div>
@@ -105,10 +140,10 @@ class Usuario
                                 <i class="bi bi-lock"></i>
                             </span>
                             <input
-                            type="password"
-                            class="form-control"
-                            id="password1"
-                            name="password"
+                                type="password"
+                                class="form-control"
+                                id="password1"
+                                name="password"
                             />
                         </div>
                     </div>
@@ -119,10 +154,10 @@ class Usuario
                                 <i class="bi bi-lock-fill"></i>
                             </span>
                             <input
-                            type="password"
-                            class="form-control"
-                            id="password2"
-                            name="password"
+                                type="password"
+                                class="form-control"
+                                id="password2"
+                                name="confirm_password"
                             />
                         </div>
                     </div>
@@ -133,10 +168,10 @@ class Usuario
                                 <i class="bi bi-envelope"></i>
                             </span>
                             <input
-                            type="email"
-                            class="form-control"
-                            id="email1"
-                            name="email"
+                                type="email"
+                                class="form-control"
+                                id="email1"
+                                name="email"
                             />
                         </div>
                     </div>
@@ -147,19 +182,19 @@ class Usuario
                                 <i class="bi bi-envelope-fill"></i>
                             </span>
                             <input
-                            type="email"
-                            class="form-control"
-                            id="email2"
-                            name="email"
+                                type="email"
+                                class="form-control"
+                                id="email2"
+                                name="confirm_email"
                             />
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="foto" class="form-label">Foto</label>
                         <input
-                        type="file"
-                        class="form-control"
-                        name="foto"
+                            type="file"
+                            class="form-control"
+                            name="foto"
                         />
                     </div>
                     <input type="hidden" name="conectado" value="0">
@@ -182,7 +217,7 @@ class Usuario
         return $this->formRegistro;
     }
 
-    public function registrarUsuario($datos)
+    public function registerUserAccount($datos)
     {
         // Verificamos si hay un archivo subido
         if(isset($_FILES) && isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
@@ -197,7 +232,7 @@ class Usuario
         $respuesta = $this->userDB->addUsuarios($datos);
 
         if ($respuesta == 1) {
-            return '<div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+            return '<div class="alert alert-success alert-dismissible fade show d-flex align-items-center mensaje" role="alert">
                 <i class="bi bi-check-circle-fill me-2 fs-4"></i>
                 <div>
                     <strong>¡Éxito!</strong> Usuario registrado correctamente.
@@ -205,7 +240,7 @@ class Usuario
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>';
         } else {
-            return '<div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+            return '<div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mensaje" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
                 <div>
                     <strong>¡Error!</strong> No se pudo registrar el usuario. Intenta nuevamente.
@@ -224,8 +259,8 @@ class Usuario
             </div>
             <div class="card-body p-4">
                 <form
-                action="index.php"
-                method="POST">
+                    action="index.php"
+                    method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">E-Mail</label>
                         <div class="input-group">
@@ -233,10 +268,11 @@ class Usuario
                                 <i class="bi bi-envelope"></i>
                             </span>
                             <input
-                            type="email"
-                            class="form-control"
-                            name="email"
-                            required>
+                                type="email"
+                                class="form-control"
+                                name="email"
+                                required
+                            >
                         </div>
                     </div>
                     <div class="mb-3">
@@ -246,10 +282,11 @@ class Usuario
                                 <i class="bi bi-lock"></i>
                             </span>
                             <input
-                            type="password"
-                            class="form-control"
-                            name="password"
-                            required>
+                                type="password"
+                                class="form-control"
+                                name="password"
+                                required
+                            >
                         </div>
                     </div>
                     <input type="hidden" name="action" value="LOGIN_USER">
