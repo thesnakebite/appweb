@@ -16,7 +16,7 @@ if(isset($_SESSION['user'])) {
                     require('views/users/form.php');
                 }
             } else {
-                require('views/users/view.php');
+                require('views/usuarios/index.php');
             }
         } else if($_GET['views'] == 'tareas') {
             require('views/tareas/view.php');

@@ -46,6 +46,12 @@ if ($_POST) {
     }
 }
 
+if(isset($_GET['action']) && !empty($_GET['action'])){
+    if($_GET['action'] == 'CERRAR_SESION'){
+        $usuario->logout();
+    }            
+}
+
 class UserService
 {
     private $formRegistro;

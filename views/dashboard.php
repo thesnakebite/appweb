@@ -13,21 +13,6 @@
                         <small>Este es tu panel de control personal.</small>
                     </p>
                     
-                    <!-- Información de sesión -->
-                    <div class="alert alert-light border shadow-sm mt-3">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-info-circle-fill text-light me-3 fs-4"></i>
-                            <div>
-                                <?php
-                                    date_default_timezone_set('Europe/Madrid');
-                                ?>
-                                <h6 class="mb-1">Información de sesión</h6>
-                                <p class="mb-0">Última conexión: <?php echo date('d/m/Y H:i:s'); ?></p>
-                                <p class="mb-0">Email: <?php echo isset($_SESSION['email']) ? $_SESSION['email'] : 'No disponible'; ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    
                     <div class="row mt-4">
                         <!-- Resumen de actividad -->
                         <div class="col-md-4 mb-3">
