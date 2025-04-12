@@ -1,7 +1,7 @@
 <?php
-require_once('./models/model.php');
+require_once('./models/ConnectDB.php');
 
-class UsuariosDB extends ConectarDB
+class UserDB extends ConnectDB
 {
 
     private $validar = false;

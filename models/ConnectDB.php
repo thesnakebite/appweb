@@ -1,6 +1,6 @@
 <?php
 
-class ConectarDB
+class ConnectDB
 {
     private $host = HOST;
     private $user = USER;
@@ -10,21 +10,21 @@ class ConectarDB
     private $con;
     private $res;
 
-    private function ConectarDB()
+    private function conectarDB()
     {
         $this->con = mysqli_connect($this->host, $this->user, $this->pass, $this->db, $this->port);
     }
 
-    public function ConsultarDB(string $sql)
+    public function consultarDB(string $sql)
     {
-        $this->ConectarDB();
+        $this->conectarDB();
         $datos = mysqli_query($this->con, $sql);
-        $this->DesconectarDB();
+        $this->desconectarDB();
         return $datos;
     }
 
 
-    private function DesconectarDB(){
+    private function desconectarDB(){
         $this->res = mysqli_close($this->con);
        
     }

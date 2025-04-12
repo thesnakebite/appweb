@@ -23,14 +23,14 @@
         <div class="col-lg-6">
             <!-- Formulario de login -->
             <?php
-                $users = new Usuario();
+                $users = new UserService();
                 echo $users->getFormLogin();
             ?>
         </div>
         <div class="col-lg-6">
              <!-- Formulario de registro -->
              <?php
-                $users = new Usuario();
+                $users = new UserService();
                 echo $users->getFormRegister();
              ?>
         </div>

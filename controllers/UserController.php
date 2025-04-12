@@ -1,9 +1,10 @@
 <?php
+
 $RUTA_ABSOLUTA = dirname(__DIR__) . '/';
 require_once($RUTA_ABSOLUTA . 'config.php');
-require_once($RUTA_ABSOLUTA . 'models/User.php');
+require_once($RUTA_ABSOLUTA . 'models/UserDB.php');
 
-$usuario = new Usuario();
+$usuario = new UserService();
 $msn = '';
 
 if ($_POST) {
@@ -12,6 +13,9 @@ if ($_POST) {
         $datos = [];
 
         foreach ($_POST as $key => $value) {
+            // A cada valor para prevenir ataques XSS (Cross-Site Scripting)
+            // excluimos ela campo action del array, ya que ese campo solo
+            // se usa para determinar que acción realizar
             if ($key != 'action') {
                 $datos[$key] = htmlspecialchars($value);
             }
@@ -20,13 +24,16 @@ if ($_POST) {
         switch ($_POST['action']) {
             case 'REG_USUARIOS':
                 $msn = $usuario->registerUserAccount($datos);
-                $_SESSION['mensaje_registro'] = $resultado;
-                header('location:' . RUTA_WEB . 'index.php?msn=' . urlencode($msn));
+
+                header('Location:' . RUTA_WEB . 'index.php&msn=' . urlencode($msn));
                 exit;
                 break;
 
             case 'LOGIN_USER':
                 $msn = $usuario->loginUsuario($datos);
+
+                header('Location:' . RUTA_WEB . 'index.php?views=dashboard&msn=' . urlencode($msn));
+                exit;
                 break;
 
             case 'ACTUALIZAR_USUARIO':
@@ -39,57 +46,7 @@ if ($_POST) {
     }
 }
 
-// Procedimiento de formularios POST
-// if ($_POST) {
-//     if (isset($_POST['action']) && !empty($_POST['action'])){
-//         if ($_POST['action'] == 'REG_USUARIOS') {
-//             $id = $usuarios->registerUserAccount($_POST);                
-//             $msn = $usuarios->SubirFoto($_FILES,$id);
-//             header('location:'.RUTA_WEB.'index.php?views=users&msn='.$msn);                  
-//         }
-//         if ($_POST['action'] == 'LOGIN_USER'){
-//             $msn = $usuarios->loginUsuarios($_POST);  
-//             header('location:'.RUTA_WEB.'index.php?views=dashboard&msn='.$msn);               
-//         }
-//         if($_POST['action'] == 'UPDATE_USUARIOS'){
-//             $msn = $usuarios->updateUsuario($_POST); 
-//             if(isset($_POST['id']) && !empty($_POST['id'])){
-//                $id = $_POST['id'];
-//                 $msn = $usuarios->SubirFoto($_FILES,$id);
-//                 header('location:'.RUTA_WEB.'index.php?views=users&msn='.$msn);           
-//             }               
-//         }
-// 
-//     }       
-// }
-
-// if($_GET){  
-//     
-//     if(isset($_GET['action']) && !empty($_GET['action'])){
-//         if($_GET['action'] == 'CERRAR_SESSION'){
-//             $usuarios->cerrarSesion();
-//         }
-// 
-//         if($_GET['action'] == 'borraruser'){
-//             $id = base64_decode($_GET['id']);
-//             $usuarios->DeleteUsuario($id);
-//         }
-// 
-//         if($_GET['action'] == 'MODIFCAR_ESTADO'){
-//             $id = htmlspecialchars(trim($_GET['id']));
-//             $usuarios->ModificarEstado($id);
-//             
-//         }
-// 
-//         if($_GET['action'] == 'edituser'){
-//             
-//         }
-//         
-//                  
-//     }
-// }
-
-class Usuario
+class UserService
 {
     private $formRegistro;
     private $formLogin;
@@ -99,7 +56,7 @@ class Usuario
 
     public function __construct()
     {
-        $this->userDB = new UsuariosDB();
+        $this->userDB = new UserDB();
         $this->setFormRegister();
         $this->setFormLogin();
         $this->setTable();
