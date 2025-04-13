@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <i class="bi bi-house"></i>
+            <i class="bi bi-app"></i>
             AppWeb
         </a>
         <button 
@@ -26,9 +26,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?php echo (isset($_GET['views']) && $_GET['views'] == 'tareas') ? 'active' : ''; ?>" 
+                    <a class="nav-link <?php echo (isset($_GET['views']) && $_GET['views'] == 'tasks') ? 'active' : ''; ?>" 
                        aria-current="page" 
-                       href="<?php echo RUTA_WEB; ?>index.php?views=tareas">
+                       href="<?php echo RUTA_WEB; ?>index.php?views=tasks">
                         Tareas
                     </a>
                 </li>
@@ -58,7 +58,7 @@
             <!-- Logout -->
             <div class="d-flex align-items-center">
                 <?php if(isset($_SESSION['user']) && !empty($_SESSION['user'])): ?>
-                    <span class="me-3">Hola, <?php echo $_SESSION['user']; ?></span>
+                    <span class="text-black me-3">Hola, <?php echo $_SESSION['user']; ?></span>
                     <a href="<?php echo RUTA_WEB; ?>index.php?action=CERRAR_SESION" class="btn btn-outline-danger">
                         <i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión
                     </a>

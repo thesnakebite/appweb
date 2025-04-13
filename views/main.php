@@ -1,47 +1,34 @@
 <?php
+// Verificar autenticación
+$isLoggedIn = isset($_SESSION['user']);
+
 // Incluir el menú solo si el usuario está autenticado
-if(isset($_SESSION['user'])) {
+if($isLoggedIn) {
     require('views/menu.php');
 }
 
 echo '<main class="container-fluid">';
 
-if(isset($_SESSION['user'])) {
-    // Vistas privadas
-    if(isset($_GET['views']) && !empty($_GET['views'])) {
-        if($_GET['views'] == 'users') {
-            // Lógica para la vista de usuarios
-            if(isset($_GET['action']) && !empty($_GET['action'])) {
-                if($_GET['action'] == 'reguser' || $_GET['action'] == 'edituser') {
-                    require('views/users/form.php');
-                }
-            } else {
-                require('views/usuarios/index.php');
-            }
-        } else if($_GET['views'] == 'tareas') {
-            require('views/tareas/view.php');
-        } else if($_GET['views'] == 'dashboard') {
+// Obtener la vista solicitada (o establecer por defecto)
+$requestedView = isset($_GET['views']) ? $_GET['views'] : '';
+
+if($isLoggedIn) {
+    // Usuario autenticado: mostrar vistas privadas
+    switch($requestedView) {
+        case 'users':
+            require('views/usuarios/index.php');
+            break;
+        case 'tasks':
+            require('views/tareas/index.php');
+            break;
+        case 'dashboard':
+        default:
             require('views/dashboard.php');
-        }
-    } else {
-        // Vista por defecto para usuarios autenticados
-        require('views/dashboard.php');
+            break;
     }
 } else {
-    // Vistas públicas
-    if(isset($_GET['views']) && !empty($_GET['views'])) {
-        if($_GET['views'] == 'home') {
-            require('views/home.php');
-        } else if($_GET['views'] == 'login') {
-            require('views/login.php');
-        } else if($_GET['views'] == 'tareas') {
-            // Versión pública de tareas
-            require('views/tareas/view.php');
-        }
-    } else {
-        // Si no se especifica ninguna vista y el usuario no está autenticado
-        require('views/login.php');
-    }
+    // Usuario no autenticado: mostrar solo login
+    require('views/login.php');
 }
 
 echo '</main>';

@@ -47,7 +47,9 @@
                                     <div class="mt-3">
                                         <div class="text-center mb-3">
                                             <div class="d-inline-block rounded-circle bg-primary text-white" style="width: 60px; height: 60px; line-height: 60px; font-size: 24px;">
-                                                <?php echo strtoupper(substr(isset($_SESSION['user']) ? $_SESSION['user'] : 'U', 0, 1)); ?>
+                                                <?php 
+                                                echo strtoupper(substr(isset($_SESSION['user']) ? $_SESSION['user'] : 'U', 0, 1)); 
+                                                ?>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between">
