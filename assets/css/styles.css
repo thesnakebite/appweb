@@ -23,6 +23,10 @@ body {
     padding-top: 30px;
 }
 
+.active {
+    color: #D65DB1 !important;
+}
+
 .mensaje-container {
     width: 100%;
     max-width: 1200px;
