@@ -138,6 +138,8 @@ if(!isset($_SESSION['user'])) {
                 
                 // Para el checkbox de estado
                 document.getElementById('estadoUsuario').checked = usuario.estado == 1
+                // Cambiar el texto del botón
+                document.querySelector('#modalUsuario .modal-footer button[type="submit"]').textContent = 'Actualizar Usuario';
                 
                 // Mostrar la imagen actual si existe
                 const fotoContainer = document.querySelector('#modalUsuario .modal-body .mb-3:nth-child(4) + div')

@@ -65,6 +65,9 @@ if ($_POST) {
 
             case 'ACTUALIZAR_USUARIO':
                 $msn = $usuario->actualizarUsuario($datos);
+                // Redirigir de vuelta a la lista de usuarios
+                header('Location:' . RUTA_WEB . 'index.php?views=users&msn=' . urlencode('success:Usuario actualizado correctamente'));
+                exit;
                 break;
 
             default:
@@ -88,6 +91,7 @@ if ($_GET) {
                     exit;
                 }
                 break;
+
             case 'ELIMINAR_USUARIO':
                 if(isset($_GET['id'])) {
                     $id = base64_decode($_GET['id']);
