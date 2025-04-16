@@ -88,7 +88,22 @@ if ($_GET) {
                     exit;
                 }
                 break;
-        }            
+            case 'ELIMINAR_USUARIO':
+                if(isset($_GET['id'])) {
+                    $id = base64_decode($_GET['id']);
+                    $resultado = $usuario->eliminarUsuario($id);
+                    
+                    // Convertir el resultado a un formato simple para pasar por URL
+                    $tipo = (strpos($resultado, 'Éxito') !== false) ? 'warning' : 'error';
+                    $mensaje = ($tipo === 'warning') ? 'Usuario eliminado del sistema.' : 'No se pudo eliminar el usuario.';
+                    $msn = $tipo . ':' . $mensaje;
+                    
+                    // Redirigir de vuelta a la lista de usuarios
+                    header('Location:' . RUTA_WEB . 'index.php?views=users&msn=' . urlencode($msn));
+                    exit;
+                }
+                break;
+            }
     }
 }
 
