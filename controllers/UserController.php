@@ -24,16 +24,27 @@ if ($_POST) {
 
         switch ($_POST['action']) {
             case 'REG_USUARIOS':
-                
                 $resultado = $usuario->registerUserAccount($datos);
                 // Convertir el resultado a un formato simple para pasar por URL
                 $msn = $resultado['status'] . ':' . $resultado['message'];
-                // Si el registro fue exitoso, redirigir al dashboard
+                // Verificar si hay un parámetro de redirección personalizado
+                $redirect_to = isset($_POST['redirect_to']) ? $_POST['redirect_to'] : 'login';
+
                 if ($resultado['status'] === 'success') {
-                    header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
+                    // Si el registro es desde el panel de admin, redirigir a la lista de usuarios
+                    if ($redirect_to === 'users') {
+                        header('Location:' . RUTA_WEB . 'index.php?views=users&msn=' . urlencode($msn));
+                    } else {
+                        // Si es desde el formulario público, redirigir al login
+                        header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
+                    }
                 } else {
-                    // Si hubo error, redirigir de vuelta al login
-                    header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
+                    // Si hubo error, redirigir de acuerdo al parámetro
+                    if ($redirect_to === 'users') {
+                        header('Location:' . RUTA_WEB . 'index.php?views=users&msn=' . urlencode($msn));
+                    } else {
+                        header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
+                    }
                 }
                 exit;
                 break;
@@ -62,10 +73,23 @@ if ($_POST) {
     }
 }
 
-if(isset($_GET['action']) && !empty($_GET['action'])){
-    if($_GET['action'] == 'CERRAR_SESION'){
-        $usuario->logout();
-    }            
+if ($_GET) {
+    if(isset($_GET['action']) && !empty($_GET['action'])){
+        switch($_GET['action']) {
+            case 'CERRAR_SESION':
+                $usuario->logout();
+                break;
+                
+            case 'OBTENER_USUARIO_JSON':
+                if(isset($_GET['id'])) {
+                    $usuarioData = $usuario->obtenerUsuarioPorId($_GET['id']);
+                    header('Content-Type: application/json');
+                    echo json_encode($usuarioData);
+                    exit;
+                }
+                break;
+        }            
+    }
 }
 
 class UserService
@@ -178,7 +202,8 @@ class UserService
                     </div>
                     <input type="hidden" name="conectado" value="0">
                     <input type="hidden" name="estado" value="0">
-                    <input type="hidden" name="action" value="REG_USUARIOS" />
+                    <input type="hidden" name="action" value="REG_USUARIOS">
+                    <input type="hidden" name="redirect_to" value="login">
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-access">Registrar</button>
                         <button type="reset" class="btn btn-reset">Reset</button>
@@ -512,13 +537,13 @@ class UserService
                             </div>
                             
                             <div class="mb-3">
-                                <label for="passwordUsuario" class="form-label">Contraseña' . ($esEdicion ? ' (dejar en blanco para mantener la actual)' : '') . '</label>
-                                <input type="password" class="form-control" id="passwordUsuario" name="password" ' . (!$esEdicion ? '' : '') . '>
-                            </div>
-                            
-                            <div class="mb-3">
                                 <label for="emailUsuario" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="emailUsuario" name="email" value="' . $email . '" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="passwordUsuario" class="form-label">Contraseña' . ($esEdicion ? ' (dejar en blanco para mantener la actual)' : '') . '</label>
+                                <input type="password" class="form-control" id="passwordUsuario" name="password" ' . (!$esEdicion ? '' : '') . '>
                             </div>
                             
                             <div class="mb-3">
@@ -551,8 +576,11 @@ class UserService
                             if ($esEdicion) {
                                 $this->modal .= '
                                                 <input type="hidden" name="id" value="' . $id . '">';
+                            } else {
+                                // Añadir el parámetro de redirección para identificar que viene del panel de admin
+                                $this->modal .= '
+                                                <input type="hidden" name="redirect_to" value="users">';
                             }
-        
                             $this->modal .= '
                                             </form>
                                         </div>
