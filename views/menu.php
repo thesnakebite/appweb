@@ -73,14 +73,11 @@
 </nav>
 
 <header class="container mt-5 pt-3">
+    <!-- Contenedor para mensajes -->
     <div id="salidas">
-        <?php 
-        if(isset($msn) && !empty($msn)){
-            echo "<div class='mensaje'>$msn</div>";
-        }
-        if(isset($_GET['msn']) && !empty($_GET['msn'])){
-            echo '<div class="mensaje">'.$_GET['msn'].'</div>';
-        }
+        <?php
+            require_once('includes/messages.php');
+            echo displayMessages();
         ?>
     </div>
 </header>

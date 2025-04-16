@@ -9,15 +9,6 @@
     </p>
 </div>
 
-<!-- Contenedor para mensajes -->
-<div class="container" id="salidas">
-    <?php
-        if(isset($_GET['msn']) && !empty($_GET['msn'])) {
-            echo urldecode($_GET['msn']);
-        }
-    ?>
-</div>
-
 <section class="container p-5">
     <div class="row">        
         <div class="col-lg-6">

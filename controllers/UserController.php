@@ -12,6 +12,7 @@ if ($_POST) {
 
         $datos = [];
 
+        // Procesar lso datos del POST (sanitizando)
         foreach ($_POST as $key => $value) {
             // A cada valor para prevenir ataques XSS (Cross-Site Scripting)
             // excluimos ela campo action del array, ya que ese campo solo
@@ -23,16 +24,34 @@ if ($_POST) {
 
         switch ($_POST['action']) {
             case 'REG_USUARIOS':
-                $msn = $usuario->registerUserAccount($datos);
-
-                header('Location:' . RUTA_WEB . 'index.php&msn=' . urlencode($msn));
+                
+                $resultado = $usuario->registerUserAccount($datos);
+                echo "DEBUG: REG_USUARIOS - Resultado: ";
+                var_dump($resultado);
+                echo "<hr/>";
+                // Convertir el resultado a un formato simple para pasar por URL
+                $msn = $resultado['status'] . ':' . $resultado['message'];
+                // Si el registro fue exitoso, redirigir al dashboard
+                if ($resultado['status'] === 'success') {
+                    header('Location:' . RUTA_WEB . 'index.php?views=dashboard&msn=' . urlencode($msn));
+                } else {
+                    // Si hubo error, redirigir de vuelta al login
+                    header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
+                }
                 exit;
                 break;
 
             case 'LOGIN_USER':
-                $msn = $usuario->loginUsuario($datos);
-
-                header('Location:' . RUTA_WEB . 'index.php?views=dashboard&msn=' . urlencode($msn));
+                $resultado = $usuario->loginUsuario($datos);
+                $msn = $resultado['status'] . ':' . $resultado['message'];
+                
+                // Si el login fue exitoso, redirigir al dashboard
+                if ($resultado['status'] === 'success') {
+                    header('Location:' . RUTA_WEB . 'index.php?views=dashboard&msn=' . urlencode($msn));
+                } else {
+                    // Si hubo error, redirigir de vuelta al login
+                    header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
+                }
                 exit;
                 break;
 
@@ -195,21 +214,9 @@ class UserService
         $respuesta = $this->userDB->addUsuarios($datos);
 
         if ($respuesta == 1) {
-            return '<div class="alert alert-success alert-dismissible fade show d-flex align-items-center mensaje" role="alert">
-                <i class="bi bi-check-circle-fill me-2 fs-4"></i>
-                <div>
-                    <strong>¡Éxito!</strong> Usuario registrado correctamente.
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>';
+            return ['status' => 'success', 'message' => 'Usuario registrado correctamente.'];
         } else {
-            return '<div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mensaje" role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                <div>
-                    <strong>¡Error!</strong> No se pudo registrar el usuario. Intenta nuevamente.
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>';
+            return ['status' => 'error', 'message' => 'No se pudo registrar el usuario. Intenta nuevamente.'];
         }
     }
 
@@ -307,49 +314,23 @@ class UserService
     public function loginUsuario($datos)
     {
         $respuesta = $this->userDB->loginUser($datos);
-
+        
         if ($respuesta === false) {
-            return '<div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                <div>
-                    <strong>¡Error!</strong> Usuario no encontrado. Verifica tus credenciales.
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>';
+            return ['status' => 'error', 'message' => 'Usuario no encontrado. Verifica tus credenciales.'];
         } else {
-
             if ($respuesta['estado'] == 1) {
                 if (md5($datos['password']) == $respuesta['password']) {
                     $_SESSION['user'] = $respuesta['nombre'];
                     $_SESSION['email'] = $datos['email'];
                     $_SESSION['id'] = $respuesta['id'];
-
                     $this->actualizarEstadoConexion($respuesta['id'], 1);
-
-                    return '<div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
-                        <i class="bi bi-check-circle-fill me-2 fs-4"></i>
-                        <div>
-                            <strong>¡Bienvenido!</strong> Has iniciado sesión correctamente.
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>';
+                    
+                    return ['status' => 'success', 'message' => 'Has iniciado sesión correctamente.'];
                 } else {
-                    return '<div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                        <div>
-                            <strong>¡Error!</strong> Contraseña incorrecta. Intenta nuevamente.
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>';
+                    return ['status' => 'error', 'message' => 'Contraseña incorrecta. Intenta nuevamente.'];
                 }
             } else {
-                return '<div class="alert alert-warning alert-dismissible fade show d-flex align-items-center" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                    <div>
-                        <strong>¡Atención!</strong> Tu cuenta está desactivada. Contacta al administrador.
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>';
+                return ['status' => 'warning', 'message' => 'Tu cuenta está desactivada. Contacta al administrador.'];
             }
         }
     }
@@ -517,7 +498,8 @@ class UserService
         $email = $esEdicion ? $usuario['email'] : '';
         $estadoChecked = $esEdicion && $usuario['estado'] == 1 ? 'checked' : '';
         
-        $this->modal = '<!-- Modal para Usuario -->
+        $this->modal = '
+        <!-- Modal para Usuario -->
         <div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
