@@ -91,6 +91,21 @@ if ($_GET) {
                     exit;
                 }
                 break;
+            
+            case 'MODIFICAR_ESTADO':
+                if (isset($_GET['id'])) {
+                    $id = htmlspecialchars(trim($_GET['id']));
+                    $resultado = $usuario->modificarEstado($id);
+
+                    header('Content-Type: application/json');
+                    if (strpos($resultado, 'Éxito') !== false) {
+                        echo json_encode(['status' => 'success', 'message' => 'Estado modificado correctamente.']);
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'No se pudo modificar el estado.']);
+                    }
+                    exit(0);
+                }
+                break;
 
             case 'ELIMINAR_USUARIO':
                 if(isset($_GET['id'])) {

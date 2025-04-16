@@ -190,4 +190,23 @@ if(!isset($_SESSION['user'])) {
 
             vistaPrevia()
     }
+
+    async function modificarEstado(id) {
+        // Deshabilitamos el switch mientras se procesa para evitar clics múltiples
+        document.getElementById('flexSwitchCheck' + id).disabled = true
+        
+        try {
+            const response = await fetch(`index.php?action=MODIFICAR_ESTADO&id=${id}`)
+            const data = await response.json()
+            
+            // Redirigir a la misma página pero con el parámetro msn para mostrar el mensaje
+            let msn = `${data.status}:${data.message}`;
+            window.location.href = `index.php?views=users&msn=${encodeURIComponent(msn)}`
+            
+        } catch (error) {
+            console.error('Error:', error)
+            // En caso de error, también redirigir pero con mensaje de error
+            window.location.href = `index.php?views=users&msn=${encodeURIComponent('error:Error al procesar la solicitud.')}`
+        }
+    }
 </script>
