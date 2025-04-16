@@ -72,7 +72,7 @@
     </div>
 </nav>
 
-<header class="container mt-5 pt-3">
+<header class="container mt-5">
     <!-- Contenedor para mensajes -->
     <div id="salidas">
         <?php

@@ -50,13 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             email1.style.border = '';
             email2.style.border = '';
         }
-
-        // Validar campos ocultos
-        if (con && est && (con.value !== '0' || est.value !== '1')) {
-            alert('Los campos ocultos tienen valores incorrectos');
-            esValido = false;
-        }
-
+        
         return esValido;
     }
 });

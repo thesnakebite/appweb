@@ -9,6 +9,16 @@
     </p>
 </div>
 
+<header class="container mt-5">
+    <!-- Contenedor para mensajes -->
+    <div id="salidas">
+        <?php
+            require_once('includes/messages.php');
+            echo displayMessages();
+        ?>
+    </div>
+</header>
+
 <section class="container p-5">
     <div class="row">        
         <div class="col-lg-6">

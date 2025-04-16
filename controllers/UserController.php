@@ -26,14 +26,11 @@ if ($_POST) {
             case 'REG_USUARIOS':
                 
                 $resultado = $usuario->registerUserAccount($datos);
-                echo "DEBUG: REG_USUARIOS - Resultado: ";
-                var_dump($resultado);
-                echo "<hr/>";
                 // Convertir el resultado a un formato simple para pasar por URL
                 $msn = $resultado['status'] . ':' . $resultado['message'];
                 // Si el registro fue exitoso, redirigir al dashboard
                 if ($resultado['status'] === 'success') {
-                    header('Location:' . RUTA_WEB . 'index.php?views=dashboard&msn=' . urlencode($msn));
+                    header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
                 } else {
                     // Si hubo error, redirigir de vuelta al login
                     header('Location:' . RUTA_WEB . 'index.php?views=login&msn=' . urlencode($msn));
@@ -116,34 +113,6 @@ class UserService
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="password1" class="form-label">Contraseña</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="bi bi-lock"></i>
-                            </span>
-                            <input
-                                type="password"
-                                class="form-control"
-                                id="password1"
-                                name="password"
-                            />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password2" class="form-label">Confirmar Contraseña</label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="bi bi-lock-fill"></i>
-                            </span>
-                            <input
-                                type="password"
-                                class="form-control"
-                                id="password2"
-                                name="confirm_password"
-                            />
-                        </div>
-                    </div>
-                    <div class="mb-3">
                         <label for="email1" class="form-label">Email</label>
                         <div class="input-group">
                             <span class="input-group-text">
@@ -172,6 +141,34 @@ class UserService
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="password1" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password1"
+                                name="password"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Confirmar Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password2"
+                                name="confirm_password"
+                            />
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="foto" class="form-label">Foto</label>
                         <input
                             type="file"
@@ -180,7 +177,7 @@ class UserService
                         />
                     </div>
                     <input type="hidden" name="conectado" value="0">
-                    <input type="hidden" name="estado" value="1">
+                    <input type="hidden" name="estado" value="0">
                     <input type="hidden" name="action" value="REG_USUARIOS" />
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-access">Registrar</button>
