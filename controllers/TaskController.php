@@ -7,82 +7,6 @@ require_once($RUTA_ABSOLUTA . 'models/TaskDB.php');
 $tareas = new TaskService();
 $msn = '';
 
-// if ($_GET) {
-
-//     if (isset($_GET['views']) && !empty($_GET['views'])) {
-
-//         if ($_GET['views'] == 'updateTareas') {
-
-//             $id = base64_decode($_GET['id']);
-//             $tareasDB = new TaskDB();
-//             $tarea = $tareasDB->consultarTareaById($id);
-//         }
-//     }
-//     if (isset($_GET['action']) && !empty($_GET['action'])) {
-
-//         if ($_GET['action'] == 'deleteTareas') {
-
-//             $id = base64_decode($_GET['id']);
-//             $tareasDB = new TaskDB();
-
-//             $res = $tareasDB->deleteTareasDB($id);
-
-//             if ($res == 1) {
-//                 $msn = '<div class="alert alert-success">Datos con la id:' . $id . ' El registro se ha eliminado!</div>';
-//                 header('location:index.php?views=Tareas&msn=' . $msn);
-//             } else {
-//                 $msn = '<div class="alert alert-success">El registro no ha sido borrado!</div>';
-//                 header('location:index.php?views=Tareas&msn=' . $msn);
-//             }
-//         }
-//     }
-// }
-
-// if ($_POST) {
-//     if (isset($_POST['action']) && !empty($_POST['action'])) {
-//         if ($_POST['action'] == 'ADD_TAREAS') {
-
-//             $datos['nombre'] = $_POST['nombre'];
-//             $datos['tiempo'] = $_POST['tiempo'];
-//             $datos['estado'] = $_POST['estado'];
-
-//             $tareasDB = new TaskDB();
-//             $respuesta = $tareasDB->addTareas($datos);
-
-//             if ($respuesta) {
-//                 $mensaje = '<div class="alert alert-success" role="alert">Tarea agregada correctamente</div>';
-//                 header('location: index.php?views=Tareas&mensaje=' . $mensaje);
-//             } else {
-//                 $mensaje = '<div class="alert alert-danger" role="alert">Error al agregar la tarea</div>';
-//                 header('location: index.php?views=Tareas&mensaje=' . $mensaje);
-//             }
-//         }
-//     }
-
-//     if (isset($_POST['action']) && !empty($_POST['action'])) {
-
-//         if ($_POST['action'] == 'UPDATE_TAREAS') {
-
-//             $datos['nombre'] = $_POST['nombre'];
-//             $datos['tiempo'] = $_POST['tiempo'];
-//             $datos['estado'] = $_POST['estado'];
-//             $datos['id'] = $_POST['id'];
-//             $tareasDB = new TaskDB();
-//             $respuesta = $tareasDB->updateTareasDB($datos);
-
-//             if ($respuesta) {
-//                 $mensaje = '<div class="alert alert-success" role="alert">Tarea actualizada correctamente</div>';
-//                 header('location: index.php?views=Tareas&mensaje=' . $mensaje);
-//             } else {
-//                 $mensaje = '<div class="alert alert-danger" role="alert">Error al actualizar la tarea</div>';
-//                 header('location: index.php?views=Tareas&mensaje=' . $mensaje);
-//             }
-//             exit;
-//         }
-//     }
-// }
-
-// Manejar peticiones POST
 if ($_POST) {
     if (isset($_POST['action']) && !empty($_POST['action'])) {
 
@@ -129,6 +53,21 @@ if ($_GET) {
                     $tareaData = $tareas->obtenerTareaPorId($_GET['id']);
                     header('Content-Type: application/json');
                     echo json_encode($tareaData);
+                    exit;
+                }
+                break;
+
+            case 'ELIMINAR_TAREA':
+                if(isset($_GET['id'])) {
+                    $id = base64_decode($_GET['id']);
+                    $resultado = $tareas->eliminarTarea($id);
+                    
+                    $tipo = (strpos($resultado, 'Éxito') !== false) ? 'warning' : 'error';
+                    $mensaje = ($tipo === 'warning') ? 'Tarea eliminada del sistema.' : 'No se pudo eliminar la tarea.';
+                    $msn = $tipo . ':' . $mensaje;
+                    
+                    // Redirigir de vuelta a la lista de usuarios
+                    header('Location:' . RUTA_WEB . 'index.php?views=tasks&msn=' . urlencode($msn));
                     exit;
                 }
                 break;
@@ -397,6 +336,29 @@ class TaskService
             return ['status' => 'success', 'message' => 'Tarea actualizada correctamente.'];
         } else {
             return ['status' => 'error', 'message' => 'Error al actualizar la tarea.'];
+        }
+    }
+
+    public function eliminarTarea($id)
+    {
+        $resultado = $this->tareasDB->deleteTareasDB($id);
+        
+        if ($resultado == 1) {
+            return '<div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                <div>
+                    <strong>¡Éxito!</strong> Tarea eliminada correctamente.
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+        } else {
+            return '<div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                <div>
+                    <strong>¡Error!</strong> No se pudo eliminar la tarea.
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
         }
     }
 }
