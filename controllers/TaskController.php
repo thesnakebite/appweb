@@ -109,6 +109,14 @@ if ($_POST) {
                 header('Location:' . RUTA_WEB . 'index.php?views=' . $redirect_to . '&msn=' . urlencode($msn));
                 exit;
                 break;
+
+            case 'UPDATE_TAREAS':
+                $resultado = $tareas->updateTarea($datos);
+
+                $msn = $resultado['status'] . ':' . $resultado['message'];                
+                header('Location:' . RUTA_WEB . 'index.php?views=tasks&msn=' . urlencode($msn));
+                exit;
+                break;
         }
     }
 }
@@ -376,62 +384,20 @@ class TaskService
         return $this->tareasDB->consultarTareaById($id);
     }
 
-    private function setFormulario(string $views, $tarea = null)
+    public function updateTarea($datos)
     {
-        // Valores por defecto para creación
-        $titulo = ($views == 'updateTareas') ? 'Editar Tarea' : 'Agregar Nueva Tarea';
-        $action = ($views == 'updateTareas') ? 'UPDATE_TAREAS' : 'ADD_TAREAS';
+        // Si estado no está definido, establecerlo a 0
+        if (!isset($datos['estado'])) {
+            $datos['estado'] = 0;
+        }
 
-        $nombreBoton = ($views == 'updateTareas') ? 'editar' : 'agregar';
-        $textoBoton = ($views == 'updateTareas') ? 'Editar Tarea' : 'Agregar Tarea';
+        $respuesta = $this->tareasDB->updateTareasDB($datos);
 
-        // Valores de los campos
-        $nombreValue = ($views == 'updateTareas' && isset($tarea['nombre'])) ? $tarea['nombre'] : '';
-        $tiempoValue = ($views == 'updateTareas' && isset($tarea['tiempo'])) ? $tarea['tiempo'] : '';
-        $estadoDisponible = ($views == 'updateTareas' && isset($tarea['estado']) && $tarea['estado'] == 1) ? 'selected' : '';
-        $estadoNoDisponible = ($views == 'updateTareas' && isset($tarea['estado']) && $tarea['estado'] == 0) ? 'selected' : '';
-
-        // Campo id oculto (solo para edición)
-        $campoId = ($views == 'updateTareas' && isset($tarea['id'])) ? '<input type="hidden" name="id" value="' . $tarea['id'] . '">' : '';
-
-        $this->formulario = '
-        <div class="card" style="background-color: #d4edda; border-color: #c3e6cb; max-width: 600px; width: 100%;">
-            <div class="card-body">
-                <h5 class="card-title">' . $titulo . '</h5>
-                <form method="POST" action="controller.php">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre de la tarea:</label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre de la tarea" value="' . $nombreValue . '" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="tiempo" class="form-label">Tiempo estimado:</label>
-                        <input type="date" id="tiempo" name="tiempo" class="form-control" value="' . $tiempoValue . '" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="estado" class="form-label">Estado:</label>
-                        <select id="estado" name="estado" class="form-select" required>
-                            <option value="1" ' . $estadoDisponible . '>Disponible</option>
-                            <option value="0" ' . $estadoNoDisponible . '>No Disponible</option>
-                        </select>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <input type="hidden" name="action" value="' . $action . '">
-                        ' . $campoId . '
-                        <button type="submit" name="' . $nombreBoton . '" class="btn btn-primary">' . $textoBoton . '</button>
-                        <button type="reset" class="btn btn-warning">Restablecer</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="d-flex justify-content-start mt-3">
-            <a href="index.php" class="btn btn-secondary">Volver a la Vista de Inicio</a>
-        </div>';
-    }
-
-    public function getFormulario($views, $tarea = null)
-    {
-        $this->setFormulario($views, $tarea);
-        return $this->formulario;
+        if ($respuesta) {
+            return ['status' => 'success', 'message' => 'Tarea actualizada correctamente.'];
+        } else {
+            return ['status' => 'error', 'message' => 'Error al actualizar la tarea.'];
+        }
     }
 }
 
