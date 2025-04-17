@@ -379,6 +379,7 @@ class UserService
                     $_SESSION['user'] = $respuesta['nombre'];
                     $_SESSION['email'] = $datos['email'];
                     $_SESSION['id'] = $respuesta['id'];
+                    $_SESSION['foto'] = $respuesta['foto'];
                     $this->actualizarEstadoConexion($respuesta['id'], 1);
                     
                     return ['status' => 'success', 'message' => 'Has iniciado sesión correctamente.'];

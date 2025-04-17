@@ -47,8 +47,13 @@
                                     <div class="mt-3">
                                         <div class="text-center mb-3">
                                             <div class="d-inline-block rounded-circle bg-primary text-white" style="width: 60px; height: 60px; line-height: 60px; font-size: 24px;">
-                                                <?php 
-                                                echo strtoupper(substr(isset($_SESSION['user']) ? $_SESSION['user'] : 'U', 0, 1)); 
+                                                <?php
+                                                    // Verificar si el usuario tiene foto de perfil
+                                                    if(isset($_SESSION['foto']) && !empty($_SESSION['foto'])) {
+                                                        echo '<img src="' . $_SESSION['foto'] . '" alt="' . $_SESSION['user'] . '" class="rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">';
+                                                    } else {
+                                                        echo strtoupper(substr(isset($_SESSION['user']) ? $_SESSION['user'] : 'U', 0, 1)); 
+                                                    }
                                                 ?>
                                             </div>
                                         </div>
