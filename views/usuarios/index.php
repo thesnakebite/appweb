@@ -45,7 +45,6 @@ if(!isset($_SESSION['user'])) {
     header('Location: index.php?views=login');
     exit;
 }
-
 ?>
 
 <section class="container-fluid my-4">
@@ -63,8 +62,8 @@ if(!isset($_SESSION['user'])) {
                                    ? 'danger' : 'success';
                     
                     // Crear un div con la clase de alerta correspondiente
-                    echo '<div class="alert alert-'.$tipoMensaje.' alert-dismissible fade show" role="alert">';
-                    echo '<i class="bi bi-'.($tipoMensaje == 'danger' ? 'exclamation-triangle' : 'check-circle').'"></i> ';
+                    echo '<div class="alert alert-' . $tipoMensaje . ' alert-dismissible fade show" role="alert">';
+                    echo '<i class="bi bi-' . ($tipoMensaje == 'danger' ? 'exclamation-triangle' : 'check-circle') . '"></i>';
                     echo $msn;
                     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
                     echo '</div>';

@@ -4,7 +4,9 @@
     require_once('config.php');
     require_once('vendor/autoload.php');
     require_once('controllers/UserController.php');
+    require_once('controllers/TaskController.php');
     require_once('models/UserDB.php');
+    require_once('models/TaskDB.php');
     
     require('views/header.php');
     require('views/main.php');
