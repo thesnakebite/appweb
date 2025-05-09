@@ -6,4 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Php\\Filesystem\\Filesystem\\' => array($vendorDir . '/ingenio/filesystem/src/php'),
 );

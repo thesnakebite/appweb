@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-develop',
+        'version' => 'dev-develop',
+        'reference' => '51835b72a5f277f52f04fe08d9016776159f88c0',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,11 +11,20 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-develop',
+            'version' => 'dev-develop',
+            'reference' => '51835b72a5f277f52f04fe08d9016776159f88c0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'ingenio/filesystem' => array(
+            'pretty_version' => 'V1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => '4ef224b51b9a5b900818fb5cb49dd26f94bddb83',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../ingenio/filesystem',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
