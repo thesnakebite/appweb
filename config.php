@@ -4,7 +4,7 @@
 define('RUTA_ABSOLUTA', '/Users/thesnakebite/Sites/cepi-base/appweb/');    
 define('RUTA_WEB', 'http://cepi-base.test/appweb/');
 
-// conector a Base de datos
+// Conector a DB
 define('HOST','127.0.0.1');
 define('USER','root');
 define('PASSWORD','');
