@@ -53,7 +53,7 @@ class ConnectDB
             $datos = mysqli_query($this->conn, $sql);
 
             // Desconectamos a la DB
-            // $this->desconectarDB();
+            $this->desconectarDB();
             
             // Verificamos si los datos obtenidos son válidos
             if(isset($datos) and !empty($datos) and is_object($datos)) {
@@ -91,8 +91,6 @@ class DataDB extends ConnectDB
         $this->table_one = $table1;
         $this->table_two = $table2;
     }
-
-    // En ConnectDB.php, dentro de la clase DataDB
 
     public function guardarDatosDB(array $datos, ?string $campoId = 'id', ?int $valorId = null)
     {

@@ -45,7 +45,7 @@ class UserDB extends ConnectDB
         }
     }
 
-    public function addUsuarios($datos)
+    public function addUser($datos)
     {
         if ($this->validarUsuario($datos)) {
             
@@ -65,12 +65,6 @@ class UserDB extends ConnectDB
             // Eliminar campos que no existen en la tabla
             if (isset($datos['redirect_to'])) {
                 unset($datos['redirect_to']);
-            }
-            if (isset($datos['confirm_email'])) {
-                unset($datos['confirm_email']);
-            }
-            if (isset($datos['confirm_password'])) {
-                unset($datos['confirm_password']);
             }
             
             // Creamos una instancia de DataDB para app_usuarios
