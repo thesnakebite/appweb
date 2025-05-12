@@ -145,7 +145,7 @@ class UserService
 
         $respuesta = $this->userDB->addUsuarios($datos);
 
-        if ($respuesta == 1) {
+        if ($respuesta == 1 || $respuesta === true) {
             return ['status' => 'success', 'message' => 'Usuario registrado correctamente.'];
         } else {
             return ['status' => 'error', 'message' => 'No se pudo registrar el usuario. Intenta nuevamente.'];

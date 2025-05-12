@@ -7,7 +7,7 @@ class ConnectDB
     private $pass;
     private $db;
     private $port;
-    private $conn;
+    protected $conn;
     private $res;
 
     public function __construct()
@@ -21,7 +21,7 @@ class ConnectDB
         $this->conectarDB();
     }
 
-    private function conectarDB()
+    protected function conectarDB()
     {
         $this->conn = mysqli_connect(
             $this->host, 
@@ -53,7 +53,7 @@ class ConnectDB
             $datos = mysqli_query($this->conn, $sql);
 
             // Desconectamos a la DB
-            $this->desconectarDB();
+            // $this->desconectarDB();
             
             // Verificamos si los datos obtenidos son válidos
             if(isset($datos) and !empty($datos) and is_object($datos)) {
@@ -69,7 +69,6 @@ class ConnectDB
             return $e;
         }
     }
-
 
     private function desconectarDB()
     {
@@ -93,5 +92,45 @@ class DataDB extends ConnectDB
         $this->table_two = $table2;
     }
 
-    
+    // En ConnectDB.php, dentro de la clase DataDB
+
+    public function guardarDatosDB(array $datos, ?string $campoId = 'id', ?int $valorId = null)
+    {
+        
+        if(empty($datos)){
+            return false;
+        }
+        
+        $columns = [];
+        $values = [];
+        $sets = [];
+        
+        try{
+            foreach($datos as $key => $value){
+                $escapeValue = ($value === null || strtolower($value) == 'null') ? 'NULL' : "'".mysqli_real_escape_string($this->conn, $value)."'";
+                $columns[] = "`$key`";
+                $values[] = $escapeValue;
+                $sets[] = "`$key` = $escapeValue";
+            }
+            
+            if($valorId === null){
+                $sql = "INSERT INTO `{$this->table_one}` (".implode(", ", $columns).") VALUES (".implode(", ", $values).")";
+            }
+            else{
+                $sql = "UPDATE `{$this->table_one}` SET ".implode(", ", $sets)." WHERE `{$campoId}` = '{$valorId}'";
+            }
+            
+            $res = $this->consultarDB($sql);
+            
+            if ($res) {
+                return 1;
+            }
+
+            return false;
+        }
+        catch(\Exception $e){
+            error_log("DEBUG guardarDatosDB - Excepción: " . $e->getMessage());
+            return false;
+        }
+    }
 }

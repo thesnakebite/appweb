@@ -48,22 +48,39 @@ class UserDB extends ConnectDB
     public function addUsuarios($datos)
     {
         if ($this->validarUsuario($datos)) {
+            
             // Asegurarnos de que el estado tenga un valor por defecto
-            $estado = isset($datos['estado']) ? $datos['estado'] : '0';
+            $datos['estado'] = isset($datos['estado']) ? $datos['estado'] : '0';
             
-            $sql = "INSERT INTO `app_usuarios` (`nombre`, `password`, `foto`, `email`, `conectado`, `estado`)  
-                    VALUES ('" . $datos['nombre'] . "', 
-                            '" . md5($datos['password']) . "', 
-                            '" . (isset($datos['foto']) ? $datos['foto'] : '') . "', 
-                            '" . $datos['email'] . "', 
-                            '" . $datos['conectado'] . "', 
-                            '" . $estado . "')";
+            // Si hay contraseña, aplicamos md5
+            if (isset($datos['password'])) {
+                $datos['password'] = md5($datos['password']);
+            }
             
-            $resultado = $this->consultarDB($sql);
+            // Si no hay foto, establecemos un valor vacío
+            if (!isset($datos['foto'])) {
+                $datos['foto'] = '';
+            }
+            
+            // Eliminar campos que no existen en la tabla
+            if (isset($datos['redirect_to'])) {
+                unset($datos['redirect_to']);
+            }
+            if (isset($datos['confirm_email'])) {
+                unset($datos['confirm_email']);
+            }
+            if (isset($datos['confirm_password'])) {
+                unset($datos['confirm_password']);
+            }
+            
+            // Creamos una instancia de DataDB para app_usuarios
+            $dataDB = new DataDB('app_usuarios');
+            
+            // Usamos el método guardarDatosDB para insertar el registro
+            $resultado = $dataDB->guardarDatosDB($datos);
             
             return $resultado;
         }
-        
         return false;
     }
 
